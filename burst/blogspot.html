@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .mikrotik-burst-container {
+            max-width: 100%;
+            margin: 20px 0;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+        }
+
+        .mikrotik-burst-container * {
+            box-sizing: border-box;
+        }
+
+        .mikrotik-header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .mikrotik-title {
+            color: #1877F2;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+        }
+
+        .mikrotik-attribution {
+            font-size: 0.75em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .mikrotik-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .mikrotik-form-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .mikrotik-form-group:focus-within {
+            border-color: #1877F2;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.1);
+        }
+
+        .mikrotik-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .mikrotik-input, .mikrotik-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .mikrotik-input:focus, .mikrotik-select:focus {
+            outline: none;
+            border-color: #1877F2;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.1);
+        }
+
+        .mikrotik-dual-input {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .mikrotik-dual-input .mikrotik-input {
+            flex: 1;
+        }
+
+        .mikrotik-dual-input span {
+            font-weight: bold;
+            color: #1877F2;
+        }
+
+        .mikrotik-generate-btn {
+            width: 100%;
+            padding: 14px;
+            background: #1877F2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .mikrotik-generate-btn:hover {
+            background: #166fe5;
+        }
+
+        .mikrotik-results {
+            display: none;
+            background: #1877F2;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .mikrotik-results-title {
+            margin-bottom: 12px;
+            font-size: 1.3em;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .mikrotik-output-code {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            margin-bottom: 15px;
+            border-left: 3px solid #4CAF50;
+            font-size: 14px;
+        }
+
+        .mikrotik-explanation {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .mikrotik-explanation h4 {
+            color: #FFD700;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .mikrotik-explanation ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .mikrotik-explanation li {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px;
+        }
+
+        .mikrotik-explanation li:last-child {
+            border-bottom: none;
+        }
+
+        .mikrotik-copy-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .mikrotik-copy-btn:hover {
+            background: #45a049;
+        }
+
+        .mikrotik-highlight {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .mikrotik-burst-container {
+                padding: 15px;
+                margin: 10px 0;
+            }
+            
+            .mikrotik-title {
+                font-size: 1.5em;
+            }
+            
+            .mikrotik-form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mikrotik-burst-container">
+        <div class="mikrotik-header">
+            <h2 class="mikrotik-title">🚀 MikroTik Burst Limit Generator</h2>
+            <div class="mikrotik-attribution">
+  by <a href="https://www.facebook.com/100073235767620" target="_blank" rel="noopener noreferrer">Keripik Kinta</a>
+</div>
+
+        </div>
+        
+        <form id="mikrotikBurstForm">
+            <div class="mikrotik-form-grid">
+                <div class="mikrotik-form-group">
+                    <label class="mikrotik-label" for="mikrotikMaxLimitUL">Max Limit (Limit Awal)</label>
+                    <div class="mikrotik-dual-input">
+                        <input type="text" class="mikrotik-input" id="mikrotikMaxLimitUL" placeholder="Upload (e.g., 3M)" required>
+                        <span>/</span>
+                        <input type="text" class="mikrotik-input" id="mikrotikMaxLimitDL" placeholder="Download (e.g., 5M)" required>
+                    </div>
+                </div>
+
+                <div class="mikrotik-form-group">
+                    <label class="mikrotik-label" for="mikrotikAdditionalUL">Tambahan Limit (Burst)</label>
+                    <div class="mikrotik-dual-input">
+                        <input type="text" class="mikrotik-input" id="mikrotikAdditionalUL" placeholder="Upload tambahan (e.g., 2M)" required>
+                        <span>/</span>
+                        <input type="text" class="mikrotik-input" id="mikrotikAdditionalDL" placeholder="Download tambahan (e.g., 3M)" required>
+                    </div>
+                </div>
+
+                <div class="mikrotik-form-group">
+                    <label class="mikrotik-label" for="mikrotikBurstThreshold">Burst Threshold (%)</label>
+                    <input type="number" class="mikrotik-input" id="mikrotikBurstThreshold" min="1" max="100" value="75" required>
+                </div>
+
+                <div class="mikrotik-form-group">
+                    <label class="mikrotik-label" for="mikrotikLimitAt">Limit At (%)</label>
+                    <input type="number" class="mikrotik-input" id="mikrotikLimitAt" min="1" max="100" value="30" required>
+                </div>
+
+                <div class="mikrotik-form-group">
+                    <label class="mikrotik-label" for="mikrotikBurstTime">Burst Time (detik)</label>
+                    <input type="number" class="mikrotik-input" id="mikrotikBurstTime" min="1" max="60" value="15" required>
+                </div>
+
+                <div class="mikrotik-form-group">
+                    <label class="mikrotik-label" for="mikrotikPriority">Prioritas</label>
+                    <select class="mikrotik-select" id="mikrotikPriority" required>
+                        <option value="1">1 (Tertinggi)</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8" selected>8 (Default)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="mikrotik-generate-btn">🔥 Generate Burst Configuration</button>
+        </form>
+
+        <div id="mikrotikResults" class="mikrotik-results">
+            <h3 class="mikrotik-results-title">📋 Hasil Konfigurasi MikroTik</h3>
+            <div class="mikrotik-output-code" id="mikrotikOutputCode"></div>
+            <button class="mikrotik-copy-btn" onclick="mikrotikCopyToClipboard()">📋 Copy ke Clipboard</button>
+            
+            <div class="mikrotik-explanation">
+                <h4>📊 Penjelasan Konfigurasi:</h4>
+                <ul id="mikrotikExplanationList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function mikrotikParseSize(sizeStr) {
+            sizeStr = sizeStr.toString().toUpperCase();
+            if (sizeStr.includes('M')) {
+                return parseFloat(sizeStr.replace('M', '')) * 1000;
+            } else if (sizeStr.includes('K')) {
+                return parseFloat(sizeStr.replace('K', ''));
+            } else {
+                return parseFloat(sizeStr);
+            }
+        }
+
+        function mikrotikFormatSize(sizeKb) {
+            if (sizeKb >= 1000) {
+                const mbps = sizeKb / 1000;
+                if (mbps % 1 === 0) {
+                    return Math.round(mbps) + 'M';
+                } else {
+                    return Math.round(sizeKb) + 'k';
+                }
+            } else {
+                return Math.round(sizeKb) + 'k';
+            }
+        }
+
+        function mikrotikCalculateBurstDuration(maxLimitKb, burstLimitKb, burstTime) {
+            const excessBandwidth = burstLimitKb - maxLimitKb;
+            const bucketSize = maxLimitKb * burstTime;
+            const actualDuration = bucketSize / burstLimitKb;
+            return Math.round(actualDuration * 10) / 10;
+        }
+
+        document.getElementById('mikrotikBurstForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const maxUL = document.getElementById('mikrotikMaxLimitUL').value.toUpperCase();
+            const maxDL = document.getElementById('mikrotikMaxLimitDL').value.toUpperCase();
+            const addUL = document.getElementById('mikrotikAdditionalUL').value.toUpperCase();
+            const addDL = document.getElementById('mikrotikAdditionalDL').value.toUpperCase();
+            const thresholdPercent = parseInt(document.getElementById('mikrotikBurstThreshold').value);
+            const limitAtPercent = parseInt(document.getElementById('mikrotikLimitAt').value);
+            const burstTime = parseInt(document.getElementById('mikrotikBurstTime').value);
+            const priority = document.getElementById('mikrotikPriority').value;
+
+            const maxULKb = mikrotikParseSize(maxUL);
+            const maxDLKb = mikrotikParseSize(maxDL);
+            const addULKb = mikrotikParseSize(addUL);
+            const addDLKb = mikrotikParseSize(addDL);
+
+            const burstULKb = maxULKb + addULKb;
+            const burstDLKb = maxDLKb + addDLKb;
+
+            const thresholdULKb = Math.round(maxULKb * (thresholdPercent / 100));
+            const thresholdDLKb = Math.round(maxDLKb * (thresholdPercent / 100));
+
+            const limitAtULKb = Math.round(maxULKb * (limitAtPercent / 100));
+            const limitAtDLKb = Math.round(maxDLKb * (limitAtPercent / 100));
+
+            const burstDurationUL = mikrotikCalculateBurstDuration(maxULKb, burstULKb, burstTime);
+            const burstDurationDL = mikrotikCalculateBurstDuration(maxDLKb, burstDLKb, burstTime);
+
+            const output = `${mikrotikFormatSize(maxULKb)}/${mikrotikFormatSize(maxDLKb)} ${mikrotikFormatSize(burstULKb)}/${mikrotikFormatSize(burstDLKb)} ${mikrotikFormatSize(thresholdULKb)}/${mikrotikFormatSize(thresholdDLKb)} ${burstTime}/${burstTime} ${priority} ${mikrotikFormatSize(limitAtULKb)}/${mikrotikFormatSize(limitAtDLKb)}`;
+
+            document.getElementById('mikrotikOutputCode').textContent = output;
+            
+            const explanationList = document.getElementById('mikrotikExplanationList');
+            explanationList.innerHTML = `
+                <li><strong>Max Limit:</strong> ${mikrotikFormatSize(maxULKb)}/${mikrotikFormatSize(maxDLKb)} (${(maxULKb/1000).toFixed(1)} Mbps UL / ${(maxDLKb/1000).toFixed(1)} Mbps DL)</li>
+                <li><strong>Burst Limit:</strong> <span class="mikrotik-highlight">${mikrotikFormatSize(burstULKb)}/${mikrotikFormatSize(burstDLKb)} (${(burstULKb/1000).toFixed(1)} Mbps UL / ${(burstDLKb/1000).toFixed(1)} Mbps DL)</span></li>
+                <li><strong>Burst Threshold:</strong> ${mikrotikFormatSize(thresholdULKb)}/${mikrotikFormatSize(thresholdDLKb)} (${thresholdPercent}% dari max limit)</li>
+                <li><strong>Burst Time:</strong> ${burstTime} detik (waktu maksimum burst)</li>
+                <li><strong>Durasi Burst Aktual:</strong> <span class="mikrotik-highlight">~${burstDurationUL} detik UL / ~${burstDurationDL} detik DL</span></li>
+                <li><strong>Prioritas:</strong> ${priority}</li>
+                <li><strong>Limit At:</strong> ${mikrotikFormatSize(limitAtULKb)}/${mikrotikFormatSize(limitAtDLKb)} (${limitAtPercent}% guaranteed bandwidth)</li>
+                <li><strong>Tambahan Kecepatan:</strong> <span class="mikrotik-highlight">+${(addULKb/1000).toFixed(1)} Mbps UL / +${(addDLKb/1000).toFixed(1)} Mbps DL saat burst aktif</span></li>
+            `;
+
+            document.getElementById('mikrotikResults').style.display = 'block';
+            document.getElementById('mikrotikResults').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        function mikrotikCopyToClipboard() {
+            const outputText = document.getElementById('mikrotikOutputCode').textContent;
+            navigator.clipboard.writeText(outputText).then(function() {
+                const btn = document.querySelector('.mikrotik-copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#2196F3';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#4CAF50';
+                }, 2000);
+            });
+        }
+
+        // Set default values
+        document.getElementById('mikrotikMaxLimitUL').value = '3M';
+        document.getElementById('mikrotikMaxLimitDL').value = '5M';
+        document.getElementById('mikrotikAdditionalUL').value = '3M';
+        document.getElementById('mikrotikAdditionalDL').value = '3M';
+    </script>
+</body>
+</html>
