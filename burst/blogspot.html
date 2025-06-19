@@ -21,21 +21,47 @@
 
         .mikrotik-header {
             text-align: center;
-            margin-bottom: 25px;
+            margin: -20px -20px 25px -20px;
+            padding: 25px 20px;
+            background: linear-gradient(135deg, #4A90E2 0%, #357ABD 50%, #1E5A96 100%);
+            border-radius: 10px 10px 0 0;
             position: relative;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
         }
 
         .mikrotik-title {
-            color: #1877F2;
-            font-size: 1.8em;
+            color: white;
+            font-size: 2.2em;
             font-weight: bold;
-            margin: 0 0 5px 0;
+            margin: 0 0 8px 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .mikrotik-title .rocket-icon {
+            font-size: 1.1em;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
 
         .mikrotik-attribution {
-            font-size: 0.75em;
-            color: #888;
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.9);
             font-style: italic;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .mikrotik-attribution a {
+            color: rgba(255, 255, 255, 0.95);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .mikrotik-attribution a:hover {
+            color: white;
+            text-decoration: underline;
         }
 
         .mikrotik-form-grid {
@@ -193,8 +219,13 @@
                 margin: 10px 0;
             }
             
+            .mikrotik-header {
+                margin: -15px -15px 20px -15px;
+                padding: 20px 15px;
+            }
+            
             .mikrotik-title {
-                font-size: 1.5em;
+                font-size: 1.8em;
             }
             
             .mikrotik-form-grid {
@@ -206,11 +237,13 @@
 <body>
     <div class="mikrotik-burst-container">
         <div class="mikrotik-header">
-            <h2 class="mikrotik-title">&#x1F680; MikroTik Burst Limit Generator</h2>
+            <h2 class="mikrotik-title">
+                <span class="rocket-icon">🚀</span>
+                MikroTik Burst Limit Generator
+            </h2>
             <div class="mikrotik-attribution">
-  by <a href="https://www.facebook.com/100073235767620" target="_blank" rel="noopener noreferrer">Keripik Kinta</a>
-</div>
-
+                by <a href="https://www.facebook.com/100073235767620" target="_blank" rel="noopener noreferrer">Keripik Kinta</a>
+            </div>
         </div>
         
         <form id="mikrotikBurstForm">
