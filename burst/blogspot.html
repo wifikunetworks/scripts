@@ -206,7 +206,7 @@
 <body>
     <div class="mikrotik-burst-container">
         <div class="mikrotik-header">
-            <h2 class="mikrotik-title">🚀 MikroTik Burst Limit Generator</h2>
+            <h2 class="mikrotik-title">&#x1F680; MikroTik Burst Limit Generator</h2>
             <div class="mikrotik-attribution">
   by <a href="https://www.facebook.com/100073235767620" target="_blank" rel="noopener noreferrer">Keripik Kinta</a>
 </div>
@@ -263,16 +263,16 @@
                 </div>
             </div>
 
-            <button type="submit" class="mikrotik-generate-btn">🔥 Generate Burst Configuration</button>
+            <button type="submit" class="mikrotik-generate-btn">&#x1F525; Generate Burst Configuration</button>
         </form>
 
         <div id="mikrotikResults" class="mikrotik-results">
-            <h3 class="mikrotik-results-title">📋 Hasil Konfigurasi MikroTik</h3>
+            <h3 class="mikrotik-results-title">&#x1F4CB; Hasil Konfigurasi MikroTik</h3>
             <div class="mikrotik-output-code" id="mikrotikOutputCode"></div>
-            <button class="mikrotik-copy-btn" onclick="mikrotikCopyToClipboard()">📋 Copy ke Clipboard</button>
+            <button class="mikrotik-copy-btn" onclick="mikrotikCopyToClipboard()">&#x1F4CB; Copy ke Clipboard</button>
             
             <div class="mikrotik-explanation">
-                <h4>📊 Penjelasan Konfigurasi:</h4>
+                <h4>&#x1F4CA; Penjelasan Konfigurasi:</h4>
                 <ul id="mikrotikExplanationList"></ul>
             </div>
         </div>
@@ -364,7 +364,7 @@
             navigator.clipboard.writeText(outputText).then(function() {
                 const btn = document.querySelector('.mikrotik-copy-btn');
                 const originalText = btn.textContent;
-                btn.textContent = '✅ Copied!';
+                btn.textContent = '\u2705 Copied!';
                 btn.style.background = '#2196F3';
                 
                 setTimeout(() => {
