@@ -244,8 +244,8 @@
                 </div>
 
                 <div class="mikrotik-form-group">
-                    <label class="mikrotik-label" for="mikrotikBurstTime">Burst Time (detik)</label>
-                    <input type="number" class="mikrotik-input" id="mikrotikBurstTime" min="1" max="60" value="15" required>
+                    <label class="mikrotik-label" for="mikrotikBurstDuration">Burst Duration (detik)</label>
+                    <input type="number" class="mikrotik-input" id="mikrotikBurstDuration" min="1" max="60" value="8" required>
                 </div>
 
                 <div class="mikrotik-form-group">
@@ -303,11 +303,10 @@
             }
         }
 
-        function mikrotikCalculateBurstDuration(maxLimitKb, burstLimitKb, burstTime) {
-            const excessBandwidth = burstLimitKb - maxLimitKb;
-            const bucketSize = maxLimitKb * burstTime;
-            const actualDuration = bucketSize / burstLimitKb;
-            return Math.round(actualDuration * 10) / 10;
+        function mikrotikCalculateBurstTime(maxLimitKb, burstLimitKb, desiredDuration) {
+            // Formula: burst_time = (desired_duration * burst_limit) / max_limit
+            const burstTime = Math.ceil((desiredDuration * burstLimitKb) / maxLimitKb);
+            return Math.max(1, Math.min(60, burstTime)); // Clamp between 1-60 seconds
         }
 
         document.getElementById('mikrotikBurstForm').addEventListener('submit', function(e) {
@@ -319,7 +318,7 @@
             const addDL = document.getElementById('mikrotikAdditionalDL').value.toUpperCase();
             const thresholdPercent = parseInt(document.getElementById('mikrotikBurstThreshold').value);
             const limitAtPercent = parseInt(document.getElementById('mikrotikLimitAt').value);
-            const burstTime = parseInt(document.getElementById('mikrotikBurstTime').value);
+            const desiredDuration = parseInt(document.getElementById('mikrotikBurstDuration').value);
             const priority = document.getElementById('mikrotikPriority').value;
 
             const maxULKb = mikrotikParseSize(maxUL);
@@ -336,10 +335,15 @@
             const limitAtULKb = Math.round(maxULKb * (limitAtPercent / 100));
             const limitAtDLKb = Math.round(maxDLKb * (limitAtPercent / 100));
 
-            const burstDurationUL = mikrotikCalculateBurstDuration(maxULKb, burstULKb, burstTime);
-            const burstDurationDL = mikrotikCalculateBurstDuration(maxDLKb, burstDLKb, burstTime);
+            // Calculate burst time based on desired duration for each direction
+            const burstTimeUL = mikrotikCalculateBurstTime(maxULKb, burstULKb, desiredDuration);
+            const burstTimeDL = mikrotikCalculateBurstTime(maxDLKb, burstDLKb, desiredDuration);
 
-            const output = `${mikrotikFormatSize(maxULKb)}/${mikrotikFormatSize(maxDLKb)} ${mikrotikFormatSize(burstULKb)}/${mikrotikFormatSize(burstDLKb)} ${mikrotikFormatSize(thresholdULKb)}/${mikrotikFormatSize(thresholdDLKb)} ${burstTime}/${burstTime} ${priority} ${mikrotikFormatSize(limitAtULKb)}/${mikrotikFormatSize(limitAtDLKb)}`;
+            // Calculate actual duration with the calculated burst time
+            const actualDurationUL = Math.round((maxULKb * burstTimeUL / burstULKb) * 10) / 10;
+            const actualDurationDL = Math.round((maxDLKb * burstTimeDL / burstDLKb) * 10) / 10;
+
+            const output = `${mikrotikFormatSize(maxULKb)}/${mikrotikFormatSize(maxDLKb)} ${mikrotikFormatSize(burstULKb)}/${mikrotikFormatSize(burstDLKb)} ${mikrotikFormatSize(thresholdULKb)}/${mikrotikFormatSize(thresholdDLKb)} ${burstTimeUL}/${burstTimeDL} ${priority} ${mikrotikFormatSize(limitAtULKb)}/${mikrotikFormatSize(limitAtDLKb)}`;
 
             document.getElementById('mikrotikOutputCode').textContent = output;
             
@@ -348,8 +352,9 @@
                 <li><strong>Max Limit:</strong> ${mikrotikFormatSize(maxULKb)}/${mikrotikFormatSize(maxDLKb)} (${(maxULKb/1000).toFixed(1)} Mbps UL / ${(maxDLKb/1000).toFixed(1)} Mbps DL)</li>
                 <li><strong>Burst Limit:</strong> <span class="mikrotik-highlight">${mikrotikFormatSize(burstULKb)}/${mikrotikFormatSize(burstDLKb)} (${(burstULKb/1000).toFixed(1)} Mbps UL / ${(burstDLKb/1000).toFixed(1)} Mbps DL)</span></li>
                 <li><strong>Burst Threshold:</strong> ${mikrotikFormatSize(thresholdULKb)}/${mikrotikFormatSize(thresholdDLKb)} (${thresholdPercent}% dari max limit)</li>
-                <li><strong>Burst Time:</strong> ${burstTime} detik (waktu maksimum burst)</li>
-                <li><strong>Durasi Burst Aktual:</strong> <span class="mikrotik-highlight">~${burstDurationUL} detik UL / ~${burstDurationDL} detik DL</span></li>
+                <li><strong>Burst Time (Dihitung):</strong> <span class="mikrotik-highlight">${burstTimeUL}/${burstTimeDL} detik</span></li>
+                <li><strong>Durasi Burst Aktual:</strong> <span class="mikrotik-highlight">~${actualDurationUL} detik UL / ~${actualDurationDL} detik DL</span></li>
+                <li><strong>Target Durasi:</strong> ${desiredDuration} detik (untuk kedua arah)</li>
                 <li><strong>Prioritas:</strong> ${priority}</li>
                 <li><strong>Limit At:</strong> ${mikrotikFormatSize(limitAtULKb)}/${mikrotikFormatSize(limitAtDLKb)} (${limitAtPercent}% guaranteed bandwidth)</li>
                 <li><strong>Tambahan Kecepatan:</strong> <span class="mikrotik-highlight">+${(addULKb/1000).toFixed(1)} Mbps UL / +${(addDLKb/1000).toFixed(1)} Mbps DL saat burst aktif</span></li>
