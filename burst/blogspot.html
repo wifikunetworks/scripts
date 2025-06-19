@@ -21,47 +21,21 @@
 
         .mikrotik-header {
             text-align: center;
-            margin: -20px -20px 25px -20px;
-            padding: 25px 20px;
-            background: linear-gradient(135deg, #4A90E2 0%, #357ABD 50%, #1E5A96 100%);
-            border-radius: 10px 10px 0 0;
+            margin-bottom: 25px;
             position: relative;
-            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
         }
 
         .mikrotik-title {
-            color: white;
-            font-size: 2.2em;
+            color: #1877F2;
+            font-size: 1.8em;
             font-weight: bold;
-            margin: 0 0 8px 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .mikrotik-title .rocket-icon {
-            font-size: 1.1em;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            margin: 0 0 5px 0;
         }
 
         .mikrotik-attribution {
-            font-size: 0.85em;
-            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.75em;
+            color: #888;
             font-style: italic;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .mikrotik-attribution a {
-            color: rgba(255, 255, 255, 0.95);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .mikrotik-attribution a:hover {
-            color: white;
-            text-decoration: underline;
         }
 
         .mikrotik-form-grid {
@@ -219,13 +193,8 @@
                 margin: 10px 0;
             }
             
-            .mikrotik-header {
-                margin: -15px -15px 20px -15px;
-                padding: 20px 15px;
-            }
-            
             .mikrotik-title {
-                font-size: 1.8em;
+                font-size: 1.5em;
             }
             
             .mikrotik-form-grid {
@@ -237,13 +206,11 @@
 <body>
     <div class="mikrotik-burst-container">
         <div class="mikrotik-header">
-            <h2 class="mikrotik-title">
-                <span class="rocket-icon">🚀</span>
-                MikroTik Burst Limit Generator
-            </h2>
+            <h2 class="mikrotik-title">&#x1F680; MikroTik Burst Limit Generator</h2>
             <div class="mikrotik-attribution">
-                by <a href="https://www.facebook.com/100073235767620" target="_blank" rel="noopener noreferrer">Keripik Kinta</a>
-            </div>
+  by <a href="https://www.facebook.com/100073235767620" target="_blank" rel="noopener noreferrer">Keripik Kinta</a>
+</div>
+
         </div>
         
         <form id="mikrotikBurstForm">
@@ -278,7 +245,7 @@
 
                 <div class="mikrotik-form-group">
                     <label class="mikrotik-label" for="mikrotikBurstDuration">Burst Duration (detik)</label>
-                    <input type="number" class="mikrotik-input" id="mikrotikBurstDuration" min="1" max="60" value="8" required>
+                    <input type="number" class="mikrotik-input" id="mikrotikBurstDuration" min="1" max="60" value="10" required>
                 </div>
 
                 <div class="mikrotik-form-group">
@@ -336,9 +303,9 @@
             }
         }
 
-        function mikrotikCalculateBurstTime(maxLimitKb, burstLimitKb, desiredDuration) {
-            // Formula: burst_time = (desired_duration * burst_limit) / max_limit
-            const burstTime = Math.ceil((desiredDuration * burstLimitKb) / maxLimitKb);
+        function mikrotikCalculateBurstTime(burstLimitKb, thresholdKb, desiredDuration) {
+            // Formula yang diperbaiki: burst_time = (desired_duration * burst_limit) / burst_threshold
+            const burstTime = Math.ceil((desiredDuration * burstLimitKb) / thresholdKb);
             return Math.max(1, Math.min(60, burstTime)); // Clamp between 1-60 seconds
         }
 
@@ -368,13 +335,13 @@
             const limitAtULKb = Math.round(maxULKb * (limitAtPercent / 100));
             const limitAtDLKb = Math.round(maxDLKb * (limitAtPercent / 100));
 
-            // Calculate burst time based on desired duration for each direction
-            const burstTimeUL = mikrotikCalculateBurstTime(maxULKb, burstULKb, desiredDuration);
-            const burstTimeDL = mikrotikCalculateBurstTime(maxDLKb, burstDLKb, desiredDuration);
+            // Calculate burst time menggunakan formula yang diperbaiki
+            const burstTimeUL = mikrotikCalculateBurstTime(burstULKb, thresholdULKb, desiredDuration);
+            const burstTimeDL = mikrotikCalculateBurstTime(burstDLKb, thresholdDLKb, desiredDuration);
 
-            // Calculate actual duration with the calculated burst time
-            const actualDurationUL = Math.round((maxULKb * burstTimeUL / burstULKb) * 10) / 10;
-            const actualDurationDL = Math.round((maxDLKb * burstTimeDL / burstDLKb) * 10) / 10;
+            // Calculate actual duration dengan burst time yang sudah dihitung
+            const actualDurationUL = Math.round((thresholdULKb * burstTimeUL / burstULKb) * 10) / 10;
+            const actualDurationDL = Math.round((thresholdDLKb * burstTimeDL / burstDLKb) * 10) / 10;
 
             const output = `${mikrotikFormatSize(maxULKb)}/${mikrotikFormatSize(maxDLKb)} ${mikrotikFormatSize(burstULKb)}/${mikrotikFormatSize(burstDLKb)} ${mikrotikFormatSize(thresholdULKb)}/${mikrotikFormatSize(thresholdDLKb)} ${burstTimeUL}/${burstTimeDL} ${priority} ${mikrotikFormatSize(limitAtULKb)}/${mikrotikFormatSize(limitAtDLKb)}`;
 
@@ -413,10 +380,10 @@
         }
 
         // Set default values
-        document.getElementById('mikrotikMaxLimitUL').value = '3M';
-        document.getElementById('mikrotikMaxLimitDL').value = '5M';
-        document.getElementById('mikrotikAdditionalUL').value = '3M';
-        document.getElementById('mikrotikAdditionalDL').value = '3M';
+        document.getElementById('mikrotikMaxLimitUL').value = '1M';
+        document.getElementById('mikrotikMaxLimitDL').value = '2M';
+        document.getElementById('mikrotikAdditionalUL').value = '2M';
+        document.getElementById('mikrotikAdditionalDL').value = '2M';
     </script>
 </body>
 </html>
