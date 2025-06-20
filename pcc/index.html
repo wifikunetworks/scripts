@@ -543,6 +543,13 @@
             
             if (routerOSVersion === 'v7') {
                 script += '# Routing Tables (RouterOS v7)\n';
+                
+                // Hapus routing table yang sudah ada terlebih dahulu
+                const interfacePattern = interfaces.map(iface => `name~"${iface}"`).join(' or ');
+                script += `/routing table remove [find ${interfacePattern}]\n`;
+                script += '\n';
+    
+                // Tambahkan routing table baru
                 interfaces.forEach(iface => {
                     script += `/routing table add name="${iface}" fib\n`;
                 });
@@ -587,12 +594,12 @@
             script += '\n';
             
             script += '# Mangle Rules - Local Traffic Bypass\n';
-            script += '/ip firewall mangle add action=accept chain=prerouting comment="PCC Load Balancing by Keripik Kinta @Pejuang GSM – v5.0 – 2025" dst-address-list=LOKAL src-address-list=LOKAL\n';
+            script += '/ip firewall mangle add action=accept chain=prerouting comment="Local Traffic Bypass" dst-address-list=LOKAL src-address-list=LOKAL\n';
             script += '/ip firewall mangle add action=accept chain=postrouting dst-address-list=LOKAL src-address-list=LOKAL\n';
             script += '/ip firewall mangle add action=accept chain=forward dst-address-list=LOKAL src-address-list=LOKAL\n';
             script += '/ip firewall mangle add action=accept chain=input dst-address-list=LOKAL src-address-list=LOKAL\n';
             script += '/ip firewall mangle add action=accept chain=output dst-address-list=LOKAL src-address-list=LOKAL\n';
-            script += '/ip firewall mangle add action=accept chain=prerouting hotspot=http\n\n';
+            script += '/ip firewall mangle add action=accept chain=prerouting comment="Load Balancing PCC Premium by Keripik Kinta @Pejuang GSM - v5.0 - 2025" hotspot=http\n\n';
             
             script += '# Input Connection Marking\n';
             interfaces.forEach(iface => {
