@@ -650,16 +650,16 @@
             
             try {
                 document.execCommand("copy");
-                pccShowNotification("Script berhasil disalin! &#128203;", "success");
+                pccShowNotification("Script berhasil disalin! 📋", "success");
             } catch (err) {
-                pccShowNotification("Gagal menyalin script &#10060;", "error");
+                pccShowNotification("Gagal menyalin script ❌", "error");
             }
         }
 
         function pccClearScript() {
             document.getElementById("pccGeneratedScript").value = "";
             document.getElementById("pccRatioDisplay").style.display = "none";
-            pccShowNotification("Script telah dihapus &#128465;&#65039;", "info");
+            pccShowNotification("Script telah dihapus 🗑️", "info");
         }
 
         function pccShowNotification(message, type) {
