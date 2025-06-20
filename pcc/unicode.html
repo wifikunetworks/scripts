@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .pcc-container {
+            max-width: 100%;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .pcc-container * {
+            box-sizing: border-box;
+        }
+
+        .pcc-title {
+            text-align: center;
+            color: #333;
+            margin: 0 0 20px 0;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .pcc-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .pcc-form-group {
+            background: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .pcc-form-group h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.1em;
+            color: #495057;
+        }
+
+        .pcc-form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .pcc-form-label {
+            min-width: 130px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .pcc-form-input, .pcc-select {
+            flex: 1;
+            padding: 8px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 13px;
+            min-width: 0;
+        }
+
+        .pcc-form-input:focus, .pcc-select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+
+        .pcc-isp-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .pcc-isp-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid #007bff;
+        }
+
+        .pcc-isp-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .pcc-button-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .pcc-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+
+        .pcc-btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .pcc-btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .pcc-btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .pcc-btn:hover {
+            opacity: 0.9;
+        }
+
+        .pcc-script-container {
+            background: #2d3748;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .pcc-script-textarea {
+            width: 100%;
+            height: 300px;
+            background: #2d3748;
+            color: #e2e8f0;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            padding: 10px;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        .pcc-info-panel {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .pcc-info-panel h3 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+        }
+
+        .pcc-ratio-display {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ffeaa7;
+            display: none;
+        }
+
+        .pcc-ratio-display h4 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+
+        .pcc-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .pcc-tooltip .pcc-tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 11px;
+        }
+
+        .pcc-tooltip:hover .pcc-tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .pcc-container {
+                padding: 10px;
+            }
+            
+            .pcc-form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pcc-isp-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .pcc-form-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .pcc-form-label {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+
+            .pcc-button-container {
+                flex-direction: column;
+            }
+
+            .pcc-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pcc-container">
+        <h1 class="pcc-title">&#128640; MikroTik PCC Load Balancing Premium Generator</h1>
+        
+        <div class="pcc-form-grid">
+            <div class="pcc-form-group">
+                <h3>&#9881;&#65039; Konfigurasi Dasar</h3>
+                <div class="pcc-form-row">
+                    <label class="pcc-form-label">Jumlah ISP:</label>
+                    <select class="pcc-select" id="pccIspCount" onchange="pccUpdateISPCount()">
+                        <option value="2">2 ISP</option>
+                        <option value="3">3 ISP</option>
+                        <option value="4">4 ISP</option>
+                        <option value="5">5 ISP</option>
+                        <option value="6">6 ISP</option>
+                        <option value="7">7 ISP</option>
+                        <option value="8">8 ISP</option>
+                        <option value="9">9 ISP</option>
+                        <option value="10">10 ISP</option>
+                    </select>
+                </div>
+                <div class="pcc-form-row">
+                    <label class="pcc-form-label">RouterOS:</label>
+                    <select class="pcc-select" id="pccRouterOSVersion">
+                        <option value="v6">RouterOS v6</option>
+                        <option value="v7">RouterOS v7</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="pcc-form-group">
+                <h3>&#127919; Fitur Advanced</h3>
+                <div class="pcc-form-row">
+                    <label class="pcc-form-label pcc-tooltip">Recursive:
+                        <span class="pcc-tooltiptext">Menggunakan DNS untuk gateway checking</span>
+                    </label>
+                    <select class="pcc-select" id="pccRecursive" onchange="pccUpdateCombinedForm()">
+                        <option value="off">OFF</option>
+                        <option value="on">ON</option>
+                    </select>
+                </div>
+                <div class="pcc-form-row">
+                    <label class="pcc-form-label pcc-tooltip">Bandwidth Ratio:
+                        <span class="pcc-tooltiptext">Distribusi berdasarkan kecepatan ISP</span>
+                    </label>
+                    <select class="pcc-select" id="pccBandwidthRatio" onchange="pccUpdateCombinedForm()">
+                        <option value="off">OFF</option>
+                        <option value="on">ON</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="pccIspContainer" class="pcc-isp-container"></div>
+        <div id="pccRatioDisplay" class="pcc-ratio-display"></div>
+
+        <div class="pcc-button-container">
+            <button class="pcc-btn pcc-btn-primary" onclick="pccGenerateScript()">&#127919; Generate Script</button>
+            <button class="pcc-btn pcc-btn-secondary" onclick="pccClearScript()">&#128465;&#65039; Clear</button>
+            <button class="pcc-btn pcc-btn-success" onclick="pccCopyToClipboard()">&#128203; Copy Script</button>
+            <button class="pcc-btn pcc-btn-secondary" onclick="pccPreviewRatio()">&#128065;&#65039; Preview Ratio</button>
+        </div>
+
+        <div class="pcc-script-container">
+            <label style="color: #e2e8f0; font-weight: bold; margin-bottom: 10px; display: block;">
+                &#128220; Generated Script:
+            </label>
+            <textarea id="pccGeneratedScript" class="pcc-script-textarea" readonly placeholder="Script akan muncul di sini setelah Anda klik Generate Script..."></textarea>
+        </div>
+
+        <div class="pcc-info-panel">
+            <h3>&#128218; Cara Penggunaan</h3>
+            <ol>
+                <li><strong>Pilih jumlah ISP</strong> yang akan digunakan (2-10 ISP)</li>
+                <li><strong>Masukkan nama interface</strong> dan IP gateway untuk setiap ISP</li>
+                <li><strong>Pilih versi RouterOS</strong> (v6 atau v7)</li>
+                <li><strong>Aktifkan fitur tambahan</strong> jika diperlukan</li>
+                <li><strong>Klik "Generate Script"</strong> untuk membuat konfigurasi</li>
+                <li><strong>Copy dan paste</strong> script ke terminal MikroTik</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        let pccDnsValues = {};
+        let pccBandwidthValues = {};
+
+        const pccDnsOptions = [
+            "1.1.1.1", "1.1.1.2", "1.1.1.3", "1.1.1.4", "1.1.1.5",
+            "1.1.1.6", "1.1.1.7", "1.1.1.8", "1.1.1.9", "1.1.1.10"
+        ];
+
+        function pccUpdateISPCount() {
+            const ispCount = parseInt(document.getElementById("pccIspCount").value);
+            const container = document.getElementById("pccIspContainer");
+            
+            pccSaveCurrentValues();
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= ispCount; i++) {
+                const card = pccCreateISPCard(i);
+                container.appendChild(card);
+            }
+            
+            pccUpdateCombinedForm();
+        }
+
+        function pccCreateISPCard(index) {
+            const card = document.createElement("div");
+            card.className = "pcc-isp-card";
+            
+            card.innerHTML = `
+                <div class="pcc-isp-title">&#127760; ISP ${index}</div>
+                <div class="pcc-form-row">
+                    <label class="pcc-form-label">Interface:</label>
+                    <input type="text" class="pcc-form-input" id="pccInterfaceName${index}" 
+                           placeholder="ether${index}" value="ether${index}">
+                </div>
+                <div class="pcc-form-row">
+                    <label class="pcc-form-label">Gateway:</label>
+                    <input type="text" class="pcc-form-input" id="pccGatewayIP${index}" 
+                           placeholder="192.168.${index}.1" value="192.168.${index}.1">
+                </div>
+                <div id="pccAdditionalFields${index}"></div>
+            `;
+            
+            return card;
+        }
+
+        function pccUpdateCombinedForm() {
+            const recursive = document.getElementById("pccRecursive").value;
+            const bandwidthRatio = document.getElementById("pccBandwidthRatio").value;
+            const ispCount = parseInt(document.getElementById("pccIspCount").value);
+            
+            for (let i = 1; i <= ispCount; i++) {
+                const container = document.getElementById(`pccAdditionalFields${i}`);
+                if (!container) continue;
+                
+                container.innerHTML = '';
+                
+                if (recursive === "on") {
+                    const dnsRow = document.createElement("div");
+                    dnsRow.className = "pcc-form-row";
+                    dnsRow.innerHTML = `
+                        <label class="pcc-form-label">DNS:</label>
+                        <input type="text" class="pcc-form-input" id="pccDns${i}" 
+                               placeholder="${pccDnsOptions[i-1] || '8.8.8.8'}" 
+                               value="${pccDnsValues[i] || pccDnsOptions[i-1] || '8.8.8.8'}">
+                    `;
+                    container.appendChild(dnsRow);
+                }
+                
+                if (bandwidthRatio === "on") {
+                    const bandwidthRow = document.createElement("div");
+                    bandwidthRow.className = "pcc-form-row";
+                    bandwidthRow.innerHTML = `
+                        <label class="pcc-form-label">Bandwidth (Mbps):</label>
+                        <input type="number" class="pcc-form-input" id="pccBandwidth${i}" 
+                               placeholder="100" min="1" max="10000" 
+                               value="${pccBandwidthValues[i] || 100}">
+                    `;
+                    container.appendChild(bandwidthRow);
+                }
+            }
+        }
+
+        function pccSaveCurrentValues() {
+            const ispCount = parseInt(document.getElementById("pccIspCount").value);
+            
+            pccDnsValues = {};
+            pccBandwidthValues = {};
+            
+            for (let i = 1; i <= ispCount; i++) {
+                const dnsInput = document.getElementById(`pccDns${i}`);
+                const bandwidthInput = document.getElementById(`pccBandwidth${i}`);
+                
+                if (dnsInput) pccDnsValues[i] = dnsInput.value;
+                if (bandwidthInput) pccBandwidthValues[i] = bandwidthInput.value;
+            }
+        }
+
+        function pccCalculateOptimalRatio(bandwidths) {
+            const maxRules = 10;
+            const minBandwidth = Math.min(...bandwidths);
+            
+            function gcd(a, b) {
+                return b === 0 ? a : gcd(b, a % b);
+            }
+            
+            function gcdArray(arr) {
+                return arr.reduce(gcd);
+            }
+            
+            let ratios = bandwidths.map(bw => Math.round(bw / minBandwidth));
+            
+            const commonGcd = gcdArray(ratios);
+            if (commonGcd > 1) {
+                ratios = ratios.map(r => r / commonGcd);
+            }
+            
+            const totalRules = ratios.reduce((sum, r) => sum + r, 0);
+            
+            if (totalRules > maxRules) {
+                const scaleFactor = maxRules / totalRules;
+                ratios = ratios.map(r => Math.max(1, Math.round(r * scaleFactor)));
+            }
+            
+            return ratios;
+        }
+
+        function pccPreviewRatio() {
+            const bandwidthRatio = document.getElementById("pccBandwidthRatio").value;
+            const ispCount = parseInt(document.getElementById("pccIspCount").value);
+            const ratioDisplay = document.getElementById("pccRatioDisplay");
+            
+            if (bandwidthRatio === "off") {
+                ratioDisplay.style.display = "none";
+                return;
+            }
+            
+            const bandwidths = [];
+            for (let i = 1; i <= ispCount; i++) {
+                const bandwidth = parseInt(document.getElementById(`pccBandwidth${i}`)?.value) || 100;
+                bandwidths.push(bandwidth);
+            }
+            
+            const ratios = pccCalculateOptimalRatio(bandwidths);
+            const totalRules = ratios.reduce((sum, r) => sum + r, 0);
+            
+            let ratioText = "<h4>&#127919; Preview Bandwidth Ratio</h4>";
+            ratioText += "<p><strong>Input Bandwidth:</strong> " + bandwidths.join(" : ") + " Mbps</p>";
+            ratioText += "<p><strong>Calculated Ratio:</strong> " + ratios.join(" : ") + "</p>";
+            ratioText += "<p><strong>Total PCC Rules:</strong> " + totalRules + "/10</p>";
+            
+            ratioText += "<div style='margin-top: 10px;'>";
+            for (let i = 0; i < ispCount; i++) {
+                const percentage = ((ratios[i] / totalRules) * 100).toFixed(1);
+                ratioText += `<div>ISP ${i+1}: ${ratios[i]} rules (${percentage}%)</div>`;
+            }
+            ratioText += "</div>";
+            
+            ratioDisplay.innerHTML = ratioText;
+            ratioDisplay.style.display = "block";
+        }
+
+        function pccGenerateScript() {
+            const routerOSVersion = document.getElementById("pccRouterOSVersion").value;
+            const recursive = document.getElementById("pccRecursive").value;
+            const bandwidthRatio = document.getElementById("pccBandwidthRatio").value;
+            const ispCount = parseInt(document.getElementById("pccIspCount").value);
+            
+            const interfaces = [];
+            const gateways = [];
+            const bandwidths = [];
+            const dnsServers = [];
+            
+            for (let i = 1; i <= ispCount; i++) {
+                interfaces.push(document.getElementById(`pccInterfaceName${i}`).value.trim());
+                gateways.push(document.getElementById(`pccGatewayIP${i}`).value.trim());
+                
+                if (bandwidthRatio === "on") {
+                    bandwidths.push(parseInt(document.getElementById(`pccBandwidth${i}`)?.value) || 100);
+                }
+                
+                if (recursive === "on") {
+                    dnsServers.push(document.getElementById(`pccDns${i}`)?.value || pccDnsOptions[i-1]);
+                }
+            }
+            
+            let script = pccGenerateBaseScript(interfaces, gateways, dnsServers, bandwidths, routerOSVersion, recursive, bandwidthRatio);
+            
+            document.getElementById("pccGeneratedScript").value = script;
+            
+            if (bandwidthRatio === "on") {
+                pccPreviewRatio();
+            }
+        }
+
+        function pccGenerateBaseScript(interfaces, gateways, dnsServers, bandwidths, routerOSVersion, recursive, bandwidthRatio) {
+            let script = '';
+            
+            script += '# MikroTik PCC Load Balancing Premium Configuration\n';
+            script += '# Generated by Keripik Kinta\n';
+            script += '# RouterOS: ' + routerOSVersion + '\n';
+            script += '# ISPs: ' + interfaces.length + '\n';
+            script += '# Recursive: ' + recursive + '\n';
+            script += '# Bandwidth Ratio: ' + bandwidthRatio + '\n\n';
+            
+            script += '# Local Address Lists\n';
+            script += '/ip firewall address-list add address=10.0.0.0/8 list=LOKAL\n';
+            script += '/ip firewall address-list add address=172.16.0.0/12 list=LOKAL\n';
+            script += '/ip firewall address-list add address=192.168.0.0/16 list=LOKAL\n\n';
+            
+            script += '# Global NAT\n';
+            script += '/ip firewall nat add action=masquerade chain=srcnat comment="Global NAT for Load Balancing"\n\n';
+            
+            if (routerOSVersion === 'v7') {
+                script += '# Routing Tables (RouterOS v7)\n';
+                
+                // Hapus routing table yang sudah ada terlebih dahulu
+                const interfacePattern = interfaces.map(iface => `name~"${iface}"`).join(' or ');
+                script += `/routing table remove [find ${interfacePattern}]\n`;
+                script += '\n';
+    
+                // Tambahkan routing table baru
+                interfaces.forEach(iface => {
+                    script += `/routing table add name="${iface}" fib\n`;
+                });
+                script += '\n';
+            }
+            
+            if (recursive === 'on') {
+                script += '# DNS Routes for Gateway Checking\n';
+                for (let i = 0; i < interfaces.length; i++) {
+                    script += `/ip route add check-gateway=ping comment="DNS Check ${interfaces[i]}" distance=1 dst-address=${dnsServers[i]}/32 gateway=${gateways[i]}\n`;
+                }
+                script += '\n';
+            }
+            
+            script += '# Default Routes\n';
+            for (let i = 0; i < interfaces.length; i++) {
+                const distance = i + 1;
+                if (recursive === 'on') {
+                    script += `/ip route add check-gateway=ping comment="Default Route via ${interfaces[i]}" distance=${distance} gateway=${dnsServers[i]} target-scope=30\n`;
+                } else {
+                    script += `/ip route add check-gateway=ping comment="Default Route via ${interfaces[i]}" distance=${distance} gateway=${gateways[i]}\n`;
+                }
+            }
+            script += '\n';
+            
+            script += '# Routing Mark Routes\n';
+            for (let i = 0; i < interfaces.length; i++) {
+                if (routerOSVersion === 'v6') {
+                    if (recursive === 'on') {
+                        script += `/ip route add check-gateway=ping comment="Routing Mark for ${interfaces[i]}" distance=1 gateway=${dnsServers[i]} routing-mark="${interfaces[i]}" target-scope=30\n`;
+                    } else {
+                        script += `/ip route add check-gateway=ping comment="Routing Mark for ${interfaces[i]}" distance=1 gateway=${gateways[i]} routing-mark="${interfaces[i]}"\n`;
+                    }
+                } else {
+                    if (recursive === 'on') {
+                        script += `/ip route add check-gateway=ping comment="Routing Mark for ${interfaces[i]}" distance=1 gateway=${dnsServers[i]} routing-table="${interfaces[i]}" target-scope=30\n`;
+                    } else {
+                        script += `/ip route add check-gateway=ping comment="Routing Mark for ${interfaces[i]}" distance=1 gateway=${gateways[i]} routing-table="${interfaces[i]}"\n`;
+                    }
+                }
+            }
+            script += '\n';
+            
+            script += '# Mangle Rules - Local Traffic Bypass\n';
+            script += '/ip firewall mangle add action=accept chain=prerouting comment="Local Traffic Bypass" dst-address-list=LOKAL src-address-list=LOKAL\n';
+            script += '/ip firewall mangle add action=accept chain=postrouting dst-address-list=LOKAL src-address-list=LOKAL\n';
+            script += '/ip firewall mangle add action=accept chain=forward dst-address-list=LOKAL src-address-list=LOKAL\n';
+            script += '/ip firewall mangle add action=accept chain=input dst-address-list=LOKAL src-address-list=LOKAL\n';
+            script += '/ip firewall mangle add action=accept chain=output dst-address-list=LOKAL src-address-list=LOKAL\n';
+            script += '/ip firewall mangle add action=accept chain=prerouting comment="PCC Load Balancing Premium by Keripik Kinta @Pejuang GSM - v5.0 - 2025" hotspot=http\n\n';
+            
+            script += '# Input Connection Marking\n';
+            interfaces.forEach(iface => {
+                script += `/ip firewall mangle add action=mark-connection chain=input in-interface="${iface}" new-connection-mark="${iface}" passthrough=yes\n`;
+            });
+            script += '\n';
+            
+            script += '# Output Routing Marking\n';
+            interfaces.forEach(iface => {
+                script += `/ip firewall mangle add action=mark-routing chain=output connection-mark="${iface}" new-routing-mark="${iface}" passthrough=yes\n`;
+            });
+            script += '\n';
+            
+            script += '# PCC Load Balancing Rules\n';
+            if (bandwidthRatio === 'on') {
+                const ratios = pccCalculateOptimalRatio(bandwidths);
+                const totalRatio = ratios.reduce((sum, r) => sum + r, 0);
+                
+                let ruleIndex = 0;
+                for (let i = 0; i < interfaces.length; i++) {
+                    for (let j = 0; j < ratios[i]; j++) {
+                        script += `/ip firewall mangle add action=mark-connection chain=prerouting dst-address-type=!local new-connection-mark="${interfaces[i]}" passthrough=yes per-connection-classifier=both-addresses-and-ports:${totalRatio}/${ruleIndex} dst-address-list=!LOKAL src-address-list=LOKAL\n`;
+                        ruleIndex++;
+                    }
+                }
+            } else {
+                for (let i = 0; i < interfaces.length; i++) {
+                    script += `/ip firewall mangle add action=mark-connection chain=prerouting dst-address-type=!local new-connection-mark="${interfaces[i]}" passthrough=yes per-connection-classifier=both-addresses-and-ports:${interfaces.length}/${i} dst-address-list=!LOKAL src-address-list=LOKAL\n`;
+                }
+            }
+            script += '\n';
+            
+            script += '# Final Routing Marking\n';
+            interfaces.forEach(iface => {
+                script += `/ip firewall mangle add action=mark-routing chain=prerouting connection-mark="${iface}" new-routing-mark="${iface}" passthrough=yes dst-address-list=!LOKAL src-address-list=LOKAL\n`;
+            });
+            
+            script += '\n# Configuration Complete!\n';
+            script += '# Copy dan paste script ini ke terminal MikroTik kamu!\n';
+            
+            return script;
+        }
+
+        function pccCopyToClipboard() {
+            const script = document.getElementById("pccGeneratedScript");
+            script.select();
+            script.setSelectionRange(0, 99999);
+            
+            try {
+                document.execCommand("copy");
+                pccShowNotification("Script berhasil disalin! &#128203;", "success");
+            } catch (err) {
+                pccShowNotification("Gagal menyalin script &#10060;", "error");
+            }
+        }
+
+        function pccClearScript() {
+            document.getElementById("pccGeneratedScript").value = "";
+            document.getElementById("pccRatioDisplay").style.display = "none";
+            pccShowNotification("Script telah dihapus &#128465;&#65039;", "info");
+        }
+
+        function pccShowNotification(message, type) {
+            const notification = document.createElement("div");
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 10px 20px;
+                border-radius: 4px;
+                color: white;
+                font-weight: bold;
+                z-index: 9999;
+                font-size: 14px;
+                ${type === 'success' ? 'background: #28a745;' : 
+                  type === 'error' ? 'background: #dc3545;' : 
+                  'background: #6c757d;'}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 3000);
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            pccUpdateISPCount();
+        });
+    </script>
+</body>
+</html>
