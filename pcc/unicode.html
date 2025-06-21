@@ -315,16 +315,147 @@
             <textarea id="pccGeneratedScript" class="pcc-script-textarea" readonly placeholder="Script akan muncul di sini setelah Anda klik Generate Script..."></textarea>
         </div>
 
-        <div class="pcc-info-panel">
-            <h3>&#128218; Cara Penggunaan</h3>
+<div class="pcc-info-panel">
+            <h3>&#128218; Panduan Lengkap Penggunaan</h3>
+            
+            <h4>&#128295; Persiapan Awal</h4>
             <ol>
-                <li><strong>Pilih jumlah ISP</strong> yang akan digunakan (2-10 ISP)</li>
-                <li><strong>Masukkan nama interface</strong> dan IP gateway untuk setiap ISP</li>
-                <li><strong>Pilih versi RouterOS</strong> (v6 atau v7)</li>
-                <li><strong>Aktifkan fitur tambahan</strong> jika diperlukan</li>
-                <li><strong>Klik "Generate Script"</strong> untuk membuat konfigurasi</li>
-                <li><strong>Copy dan paste</strong> script ke terminal MikroTik</li>
+                <li><strong>Identifikasi ISP Anda:</strong>
+                    <ul>
+                        <li>Catat nama interface untuk setiap ISP (misal: ether1, ether2, pppoe-out1, dll)</li>
+                        <li>Catat IP gateway dari setiap ISP</li>
+                        <li>Catat kecepatan bandwidth setiap ISP (jika menggunakan bandwidth ratio)</li>
+                    </ul>
+                </li>
+                <li><strong>Pastikan Koneksi:</strong>
+                    <ul>
+                        <li>Semua ISP sudah terhubung dan bisa akses internet</li>
+                        <li>Gateway setiap ISP sudah dapat ping</li>
+                        <li>Interface sudah dikonfigurasi dengan IP yang benar</li>
+                    </ul>
+                </li>
             </ol>
+
+            <h4>&#9881;&#65039; Langkah-langkah Konfigurasi</h4>
+            <ol>
+                <li><strong>Pilih Jumlah ISP (2-10):</strong>
+                    <p>Sesuaikan dengan jumlah koneksi internet yang Anda miliki</p>
+                </li>
+                
+                <li><strong>Pilih Versi RouterOS:</strong>
+                    <ul>
+                        <li><strong>v6:</strong> Untuk RouterOS versi 6.x (menggunakan routing-mark)</li>
+                        <li><strong>v7:</strong> Untuk RouterOS versi 7.x (menggunakan routing-table)</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Konfigurasi Setiap ISP:</strong>
+                    <ul>
+                        <li><strong>Interface:</strong> Nama interface yang terhubung ke ISP (contoh: ether1, pppoe-out1)</li>
+                        <li><strong>Gateway:</strong> IP gateway dari ISP tersebut</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Fitur Advanced (Opsional):</strong>
+                    <ul>
+                        <li><strong>Recursive ON:</strong> 
+                            <ul>
+                                <li>Menggunakan DNS server untuk gateway checking</li>
+                                <li>Lebih stabil untuk deteksi koneksi yang down</li>
+                                <li>Masukkan DNS server yang berbeda untuk setiap ISP</li>
+                            </ul>
+                        </li>
+                        <li><strong>Bandwidth Ratio ON:</strong>
+                            <ul>
+                                <li>Distribusi traffic berdasarkan kecepatan ISP</li>
+                                <li>ISP dengan bandwidth lebih besar akan mendapat traffic lebih banyak</li>
+                                <li>Masukkan bandwidth dalam Mbps untuk setiap ISP</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li><strong>Generate dan Preview:</strong>
+                    <ul>
+                        <li>Klik "Preview Ratio" untuk melihat pembagian traffic (jika menggunakan bandwidth ratio)</li>
+                        <li>Klik "Generate Script" untuk membuat konfigurasi</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>&#128187; Implementasi ke MikroTik</h4>
+            <ol>
+                <li><strong>Backup Konfigurasi:</strong>
+                    <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; margin: 10px 0;">/system backup save name=backup-before-pcc</pre>
+                </li>
+                
+                <li><strong>Hapus Konfigurasi Lama (Jika Ada):</strong>
+                    <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; margin: 10px 0;">/ip firewall mangle remove [find comment~"PCC"]
+/ip route remove [find comment~"Load"]</pre>
+                </li>
+                
+                <li><strong>Paste Script:</strong>
+                    <ul>
+                        <li>Copy script yang dihasilkan</li>
+                        <li>Paste ke terminal MikroTik atau WinBox</li>
+                        <li>Tekan Enter untuk menjalankan</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Verifikasi:</strong>
+                    <ul>
+                        <li>Cek route: <code>/ip route print</code></li>
+                        <li>Cek mangle: <code>/ip firewall mangle print</code></li>
+                        <li>Test koneksi dari client</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>&#128203; Tips dan Troubleshooting</h4>
+            <ul>
+                <li><strong>Jika koneksi tidak seimbang:</strong>
+                    <ul>
+                        <li>Pastikan semua ISP aktif dan gateway bisa ping</li>
+                        <li>Cek apakah ada rule firewall yang memblokir</li>
+                        <li>Gunakan bandwidth ratio jika ISP memiliki kecepatan berbeda</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Jika ISP sering disconnect:</strong>
+                    <ul>
+                        <li>Aktifkan fitur Recursive</li>
+                        <li>Gunakan DNS server yang reliable (1.1.1.1, 8.8.8.8)</li>
+                        <li>Adjust timeout dan interval di gateway checking</li>
+                    </ul>
+                </li>
+                
+                <li><strong>Untuk gaming atau streaming:</strong>
+                    <ul>
+                        <li>Buat rule khusus untuk aplikasi tertentu</li>
+                        <li>Gunakan connection marking manual jika diperlukan</li>
+                        <li>Pertimbangkan menggunakan satu ISP khusus untuk aplikasi sensitif</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h4>&#128200; Monitoring dan Maintenance</h4>
+            <ul>
+                <li><strong>Monitor Traffic:</strong> <code>/tool bandwidth-test</code></li>
+                <li><strong>Cek Gateway Status:</strong> <code>/ip route print detail</code></li>
+                <li><strong>Monitor Connection:</strong> <code>/ip firewall connection print</code></li>
+                <li><strong>Log Checking:</strong> <code>/log print where topics~"route"</code></li>
+            </ul>
+
+            <div style="background: #fff3cd; padding: 15px; border-radius: 4px; margin-top: 15px; border-left: 4px solid #ffc107;">
+                <strong>&#9888;&#65039; Catatan Penting:</strong>
+                <ul style="margin: 10px 0;">
+                    <li>Selalu backup konfigurasi sebelum implementasi</li>
+                    <li>Uji menyeluruh di environment non-production dulu</li>
+                    <li>Sesuaikan dengan topologi jaringan Anda</li>
+                    <li>Script ini adalah base config, jika ada rule lain di mangle mungkin perlu penyesuaian</li>
+                    <li>Jika butuh jasa menggunakan script ini, bisa hubungi <a href="https://www.facebook.com/100073235767620" target="_blank">admin</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -526,8 +657,12 @@
         function pccGenerateBaseScript(interfaces, gateways, dnsServers, bandwidths, routerOSVersion, recursive, bandwidthRatio) {
             let script = '';
             
+			const now = new Date();
+			const timestamp = now.toLocaleDateString('id-ID') + ' ' + now.toLocaleTimeString('id-ID');
+			
             script += '# MikroTik PCC Load Balancing Premium Configuration\n';
             script += '# Generated by Keripik Kinta\n';
+			script += '# Date: ' + timestamp + '\n';
             script += '# RouterOS: ' + routerOSVersion + '\n';
             script += '# ISPs: ' + interfaces.length + '\n';
             script += '# Recursive: ' + recursive + '\n';
@@ -638,7 +773,7 @@
             });
             
             script += '\n# Configuration Complete!\n';
-            script += '# Copy dan paste script ini ke terminal MikroTik kamu!\n';
+            script += '# Semoga Sukses!\n';
             
             return script;
         }
