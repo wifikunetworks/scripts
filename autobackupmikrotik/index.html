@@ -570,7 +570,7 @@
       script += "\\n    }\\r\\\n";
       script += "\\n}\\r\\\n";
       script += "\\n:log warning \\\"-> Memulai Complete Auto Email Backup (.rsc + .backup)\\\"\\r\\\n";
-	  script += "\\n:local filename ([/system identity get name] . \\\"@\\\" . \\$day . \\\" \\\" . \\$monthname . \\\" \\\" . \\$year . \\\" \\\" . \\$systime)\\r\\\n";
+	  script += "\\n:local filename ([/system identity get name] . \\\" @ \\\" . \\$day . \\\" \\\" . \\$monthname . \\\" \\\" . \\$year . \\\" \\\" . \\$systime)\\r\\\n";
       script += "\\n\\r\\\n";
       script += "\\n# Create RSC file\\r\\\n";
       script += "\\n/export terse file=\\$filename\\r\\\n";
