@@ -1,3 +1,4 @@
+~~~
 cat > /usr/bin/passwall << 'EOF'
 #!/bin/sh
 
@@ -19,3 +20,4 @@ case "$1" in
 esac
 EOF
 chmod +x /usr/bin/passwall
+~~~
