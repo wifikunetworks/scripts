@@ -36,7 +36,7 @@ config nodes 'nodes1'
 	list balancing_node 'O1'
 	list balancing_node 'O2'
 	list balancing_node 'P1'
-	list balancing_node 'fun0KZlk'
+	list balancing_node 'P2'
 
 config nodes 'A1'
 	option remarks 'id1-support.zoom.us'
