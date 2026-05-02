@@ -5,13 +5,18 @@ cat > /usr/bin/passwall << 'EOF'
 case "$1" in
     update)
         echo "Mengupdate config passwall..."
-        wget -qO /etc/config/passwall https://github.com/wifikunetworks/scripts/raw/refs/heads/main/passwall
-        if [ $? -eq 0 ]; then
+        
+        wget --no-check-certificate -qO /tmp/passwall.tmp https://raw.githubusercontent.com/wifikunetworks/scripts/refs/heads/main/passwall
+        
+        if [ $? -eq 0 ] && [ -s /tmp/passwall.tmp ]; then
+            cp /etc/config/passwall /etc/config/passwall.bak
+            mv /tmp/passwall.tmp /etc/config/passwall
             echo "Config passwall berhasil diupdate!"
             /etc/init.d/passwall restart
             echo "Passwall direstart."
         else
             echo "GAGAL! Cek URL atau koneksi internet."
+            rm -f /tmp/passwall.tmp
         fi
         ;;
     *)
